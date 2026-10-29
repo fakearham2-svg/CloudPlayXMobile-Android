@@ -1,0 +1,27 @@
+name: Inspect CloudPlayXMobile source
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'CloudPlayXMobile-ui-oauth-followup.zip'
+      - '.github/workflows/inspect-source.yml'
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect archive and source
+        shell: bash
+        run: |
+          set -euxo pipefail
+          unzip -l CloudPlayXMobile-ui-oauth-followup.zip | head -160
+          mkdir -p /tmp/cpx
+          unzip -q CloudPlayXMobile-ui-oauth-followup.zip -d /tmp/cpx
+          echo '--- Gradle files ---'
+          find /tmp/cpx -type f \( -name gradlew -o -name settings.gradle -o -name settings.gradle.kts -o -name build.gradle -o -name build.gradle.kts \) | head -100
+          echo '--- Android source files ---'
+          find /tmp/cpx -type f \( -name '*.kt' -o -name '*.java' -o -name '*.xml' \) | head -160
+          echo '--- Google auth references ---'
+          grep -RniE 'RESULT_CANCELED|GoogleSignIn|serverClientId|AuthorizationClient|oauth|Drive' /tmp/cpx --include='*.kt' --include='*.java' --include='*.xml' --include='*.gradle' --include='*.kts' | head -160 || true
