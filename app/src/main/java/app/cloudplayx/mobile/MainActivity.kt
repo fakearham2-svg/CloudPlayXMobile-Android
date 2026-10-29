@@ -122,7 +122,7 @@ class MainActivity : Activity() {
 
         if (resultCode != RESULT_OK || data == null) {
             connectionMessage = when {
-                resultCode == RESULT_CANCELED -> "Google sign-in was cancelled. Your cloud connection was not changed. Tap Connect Google Drive to try again."
+                resultCode == RESULT_CANCELED -> "Google authorization was cancelled or rejected. If you did not tap Cancel, check Google Cloud Console: create an Android OAuth client for package app.cloudplayx.mobile and the SHA-1 certificate of this exact APK; enable Google Drive API and add your Gmail as a test user if the consent screen is in Testing. A Desktop OAuth client/secret from the PC app cannot be reused in the APK."
                 data == null -> "Google sign-in returned no response data. Check Google Play services and try again."
                 else -> "Google sign-in did not complete (result code $resultCode). Try again; if it repeats, check the OAuth package name and signing SHA-1."
             }
