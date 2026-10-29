@@ -5,6 +5,7 @@ on:
     paths:
       - 'CloudPlayXMobile-ui-oauth-followup.zip'
       - '.github/workflows/inspect-source.yml'
+      - 'README.md'
 jobs:
   inspect:
     runs-on: ubuntu-latest
